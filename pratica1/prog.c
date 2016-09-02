@@ -84,6 +84,7 @@ int main(int argc, char *argv[]){
 		sort_people(people, n, name_higher);
 
 	print_people(people, n);
-	
+	free(people);	
+
 	return 0;
 }

@@ -36,9 +36,10 @@ bool name_higher(person_t *people, int i, int j){
 	return strcmp(people[i].name, people[j].name) > 0 ? TRUE : FALSE;
 }
 
+int it_limit;
 //Ordenamento crescente. Bubble sort clássico
 void sort_people(person_t *people, int size, bool (higher)(person_t *, int, int)){
-	int i;
+	int i, it = 0;
 	bool swapped;
 
 	do{
@@ -48,6 +49,8 @@ void sort_people(person_t *people, int size, bool (higher)(person_t *, int, int)
 				swap_people(people, i-1, i);
 				swapped = TRUE;
 			}
+			it++;
+			if(it == it_limit) return;
 		}
 	} while(swapped);
 }
@@ -85,13 +88,13 @@ int main(int argc, char *argv[]){
 		s = !s;
 	}
 
+	scanf("%d", &it_limit);
 	if(strcmp(string, "ID") == 0)
 		sort_people(people, n, id_higher);
 	else if(strcmp(string, "NAME") == 0)
 		sort_people(people, n, name_higher);
-
+	
 	print_people(people, n);
 	free(people);	
-
 	return 0;
 }

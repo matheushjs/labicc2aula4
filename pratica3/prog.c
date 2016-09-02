@@ -26,32 +26,52 @@ void swap_people(person_t *people, int i, int j){
 }
 
 //Retorna TRUE se o id de people[i] for maior do que o de people[j]
-bool id_higher(person_t *people, int i, int j){
-	return people[i].id > people[j].id ? TRUE : FALSE;
+bool id_lower(person_t *l, person_t *r){
+	return l->id < r->id ? TRUE : FALSE;
 }
 
 //Retorna TRUE se o nome de people[i] for maior do que o de people[j]
-bool name_higher(person_t *people, int i, int j){
-	return strcmp(people[i].name, people[j].name) > 0 ? TRUE : FALSE;
+bool name_lower(person_t *l, person_t *r){
+	return strcmp(l->name, r->name) < 0 ? TRUE : FALSE;
 }
 
-int it_limit;
-//Ordenamento crescente. Bubble sort clássico
-void sort_people(person_t *people, int size, bool (*higher)(person_t *, int, int)){
-	int i, it = 0;
-	bool swapped;
+int it_limit, it = 0;
+bool (*lower)(person_t *, person_t *);
+void merge(person_t *main, int n, person_t *left, int llim, person_t *right, int rlim){
+	int i, l = 0, r = 0;
+	for(i = 0; i < n; i++){
+		if(r >= rlim || (l < llim && lower(left+l, right+r)))
+			main[i] = left[l++];
+		else
+			main[i] = right[r++];
+	}
+	it++;
+}
 
-	do{
-		swapped = FALSE;
-		for(i = 1; i < size; i++){
-			if(higher(people, i-1, i)){
-				swap_people(people, i-1, i);
-				swapped = TRUE;
-			}
-			it++;
-			if(it == it_limit) return;
-		}
-	} while(swapped);
+//Ordena o vetor de pessoas de forma crescente.
+//Merge sort.
+void sort_people(person_t *people, int n){
+	int mid = n/2;
+	person_t *left, *right;
+	if(n < 2) return;
+
+	left = (person_t *) malloc(sizeof(person_t) * (mid));
+	right = (person_t *) malloc(sizeof(person_t) * (n-mid));
+	memcpy(left, people, sizeof(person_t) * mid);
+	memcpy(right, people+mid, sizeof(person_t) * (n-mid));
+	
+	sort_people(left, mid);
+	sort_people(right, n-mid);
+	
+	if(it < it_limit)
+		merge(people, n, left, mid, right, n-mid);
+	else{
+		memcpy(people, left, sizeof(person_t) * mid);
+		memcpy(people+mid, right, sizeof(person_t) * (n-mid));
+	}
+
+	free(left);
+	free(right);
 }
 
 int main(int argc, char *argv[]){
@@ -88,10 +108,14 @@ int main(int argc, char *argv[]){
 	}
 
 	scanf("%d", &it_limit);
-	if(strcmp(string, "ID") == 0)
-		sort_people(people, n, id_higher);
-	else if(strcmp(string, "NAME") == 0)
-		sort_people(people, n, name_higher);
+	if(strcmp(string, "ID") == 0){
+		lower = id_lower;
+		sort_people(people, n);
+	}
+	else if(strcmp(string, "NAME") == 0){
+		lower = name_lower;
+		sort_people(people, n);
+	}
 	
 	print_people(people, n);
 	free(people);	

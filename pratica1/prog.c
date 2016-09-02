@@ -19,11 +19,10 @@ void print_people(person_t *people, int size){
 
 //Troca a posição de people[i] com people[j] no vetor.
 void swap_people(person_t *people, int i, int j){
-	void *memory = malloc(sizeof(person_t));
-	memcpy(memory, &people[i], sizeof(person_t));
-	memcpy(&people[i], &people[j], sizeof(person_t));
-	memcpy(&people[j], memory, sizeof(person_t));
-	free(memory);
+	person_t aux;
+	aux = people[i];
+	people[i] = people[j];
+	people[j] = aux;
 }
 
 //Retorna TRUE se o id de people[i] for maior do que o de people[j]
@@ -37,7 +36,7 @@ bool name_higher(person_t *people, int i, int j){
 }
 
 //Ordenamento crescente. Bubble sort clássico
-void sort_people(person_t *people, int size, bool (higher)(person_t *, int, int)){
+void sort_people(person_t *people, int size, bool (*higher)(person_t *, int, int)){
 	int i;
 	bool swapped;
 

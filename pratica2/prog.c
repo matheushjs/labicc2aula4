@@ -44,12 +44,12 @@ void sort_people(person_t *people, int size, bool (*higher)(person_t *, int, int
 	do{
 		swapped = FALSE;
 		for(i = 1; i < size; i++){
+			if(it == it_limit) return;
 			if(higher(people, i-1, i)){
 				swap_people(people, i-1, i);
 				swapped = TRUE;
 			}
 			it++;
-			if(it == it_limit) return;
 		}
 	} while(swapped);
 }
@@ -69,7 +69,9 @@ int main(int argc, char *argv[]){
 			strcpy(inst, "CAASO");
 			continue;
 		}
-		if(strcmp(string, "ID") == 0 || strcmp(string, "NAME") == 0) break;
+		if(strcmp(string, "ID") == 0
+		|| strcmp(string, "NAME") == 0
+		|| strcmp(string, "NUMBER") == 0) break;
 	
 		if(!s){
 			people = (person_t *) realloc(people, sizeof(person_t) * (n+1));
@@ -88,7 +90,7 @@ int main(int argc, char *argv[]){
 	}
 
 	scanf("%d", &it_limit);
-	if(strcmp(string, "ID") == 0)
+	if(strcmp(string, "ID") == 0 || strcmp(string, "NUMBER") == 0)
 		sort_people(people, n, id_higher);
 	else if(strcmp(string, "NAME") == 0)
 		sort_people(people, n, name_higher);

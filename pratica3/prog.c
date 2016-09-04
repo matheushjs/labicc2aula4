@@ -63,9 +63,9 @@ void sort_people(person_t *people, int n){
 	sort_people(left, mid);
 	sort_people(right, n-mid);
 	
-	if(it < it_limit)
+	if(it < it_limit){
 		merge(people, n, left, mid, right, n-mid);
-	else{
+	} else {
 		memcpy(people, left, sizeof(person_t) * mid);
 		memcpy(people+mid, right, sizeof(person_t) * (n-mid));
 	}

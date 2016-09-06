@@ -70,8 +70,7 @@ int main(int argc, char *argv[]){
 			continue;
 		}
 		if(strcmp(string, "ID") == 0
-		|| strcmp(string, "NAME") == 0
-		|| strcmp(string, "NUMBER") == 0) break;
+		|| strcmp(string, "NAME") == 0) break;
 	
 		if(!s){
 			people = (person_t *) realloc(people, sizeof(person_t) * (n+1));
@@ -90,7 +89,8 @@ int main(int argc, char *argv[]){
 	}
 
 	scanf("%d", &it_limit);
-	if(strcmp(string, "ID") == 0 || strcmp(string, "NUMBER") == 0)
+
+	if(strcmp(string, "ID") == 0)
 		sort_people(people, n, id_higher);
 	else if(strcmp(string, "NAME") == 0)
 		sort_people(people, n, name_higher);
